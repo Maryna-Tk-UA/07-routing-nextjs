@@ -1,5 +1,6 @@
 import Link from "next/link";
 import css from "./Header.module.css";
+import TagsMenu from "../TagsMenu/TagsMenu";
 
 function Header() {
   return (
@@ -13,7 +14,7 @@ function Header() {
             <Link href="/">Home</Link>
           </li>
           <li>
-            <Link href="/notes">Notes</Link>
+            <TagsMenu />
           </li>
         </ul>
       </nav>

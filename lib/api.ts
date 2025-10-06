@@ -8,19 +8,22 @@ const PER_PAGE = 12;
 interface fetchNotesProps {
   page: number;
   searchValue: string;
+  tag?: string;
 }
 
 interface fetchNotesResponse {
   notes: Note[];
   totalPages: number;
+  tag: string | undefined;
 }
 
-export async function fetchNotes({ page, searchValue }: fetchNotesProps) {
+export async function fetchNotes({ page, searchValue, tag }: fetchNotesProps) {
   const { data } = await axios.get<fetchNotesResponse>(`${BASE_URL}`, {
     params: {
       page,
       perPage: PER_PAGE,
       search: searchValue,
+      ...(tag !== "all" ? { tag: tag } : {}), // через спред якщо тег обрано, то по ньому отримання, якщо ні, то всі нотатки
     },
     headers: {
       Authorization: `Bearer ${ACCESS_TOKEN}`,
@@ -28,6 +31,30 @@ export async function fetchNotes({ page, searchValue }: fetchNotesProps) {
   });
   return data;
 }
+
+//! test
+// interface fetchTestProps {
+//   tag?: string;
+// }
+
+// interface fetchTestResponse {
+//   notes: Note[];
+//   totalPages: number;
+// }
+
+// export async function fetchTest(params?: fetchTestProps) {
+//   const { data } = await axios.get<fetchTestResponse>(`${BASE_URL}`, {
+//     params: {
+//       perPage: PER_PAGE,
+//       tag: params?.tag,
+//     },
+//     headers: {
+//       Authorization: `Bearer ${ACCESS_TOKEN}`,
+//     },
+//   });
+//   return data;
+// }
+//! test
 
 //! Запит за id
 export async function fetchNoteById(id: string) {

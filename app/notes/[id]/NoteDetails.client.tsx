@@ -1,9 +1,11 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import css from "./NoteDetails.module.css";
 import { useQuery } from "@tanstack/react-query";
 import { fetchNoteById } from "@/lib/api";
+// import { useEffect, useState } from "react";
+// import { Note } from "@/types/note";
 
 //  Отримання даних обраної нотатки за допомогою useQuery та
 // її відображення.
@@ -12,6 +14,9 @@ import { fetchNoteById } from "@/lib/api";
 //  Клієнт створює розмітку
 
 function NoteDetailsClient() {
+  //? в коментах - паралельний запит
+  // const [viewNote, setViewNote] = useState<Note | null>(null);
+  const router = useRouter();
   const { id } = useParams<{ id: string }>();
 
   const {
@@ -23,6 +28,19 @@ function NoteDetailsClient() {
     queryFn: () => fetchNoteById(id),
     refetchOnMount: false,
   });
+
+  const handleClick = () => {
+    router.back();
+  };
+
+  // useEffect(() => {
+  //   if (!note) return;
+  //   const fn = async () => {
+  //     const response = await fetchNoteById(note.id);
+  //     setViewNote(response);
+  //   };
+  //   fn();
+  // }, [note]);
 
   if (isLoading) return <p>Loading, please wait...</p>;
 
@@ -39,6 +57,10 @@ function NoteDetailsClient() {
           <p className={css.date}>
             {new Date(note.createdAt).toLocaleString()}
           </p>
+          <button className={css.backBtn} onClick={handleClick}>
+            Back
+          </button>
+          {/* {viewNote && <p className={css.test}>{viewNote.title}</p>} */}
         </div>
       )}
     </div>

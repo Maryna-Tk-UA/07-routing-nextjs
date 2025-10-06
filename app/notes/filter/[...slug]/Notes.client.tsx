@@ -1,5 +1,28 @@
 "use client";
 
+// import { Note } from "@/types/note";
+// import css from "./NotesPage.module.css";
+// import NoteList from "@/components/NoteList/NoteList";
+
+// interface NotesClientProps {
+//   notes: Note[];
+// }
+
+// function NotesClient({ notes }: NotesClientProps) {
+//   return (
+//     <div className={css.app}>
+//       <header className={css.toolbar}>
+//         <button className={css.button}>Create note +</button>
+//       </header>
+//       <NoteList notes={notes} />
+//     </div>
+//   );
+// }
+
+// export default NotesClient;
+
+//!
+
 import { fetchNotes } from "@/lib/api";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import css from "./NotesPage.module.css";
@@ -14,12 +37,18 @@ import NoteForm from "@/components/NoteForm/NoteForm";
 interface NotesClientProps {
   initialPage: number;
   initialSearch: string;
+  initialTag: string;
 }
 
-function NotesClient({ initialPage, initialSearch }: NotesClientProps) {
+function NotesClient({
+  initialPage,
+  initialSearch,
+  initialTag,
+}: NotesClientProps) {
   const [curPage, setCurPage] = useState(initialPage);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchValue, setSearchValue] = useState(initialSearch);
+  const [tag] = useState(initialTag);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -29,9 +58,11 @@ function NotesClient({ initialPage, initialSearch }: NotesClientProps) {
     setCurPage(1);
   }, 500);
 
+  const tagForApi = tag !== "all" ? tag : undefined;
+
   const { data, isSuccess } = useQuery({
-    queryKey: ["note", curPage, searchValue],
-    queryFn: () => fetchNotes({ page: curPage, searchValue }),
+    queryKey: ["note", curPage, searchValue, tag],
+    queryFn: () => fetchNotes({ page: curPage, searchValue, tag: tagForApi }),
     refetchOnMount: false,
     placeholderData: keepPreviousData,
   });

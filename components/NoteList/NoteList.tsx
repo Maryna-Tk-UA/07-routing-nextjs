@@ -41,7 +41,11 @@ function NoteList({ notes }: NoteListProps) {
           <p className={css.content}>{note.content}</p>
           <div className={css.footer}>
             <span className={css.tag}>{note.tag}</span>
-            <Link href={`/notes/${note.id}`} className={css.link}>
+            <Link
+              href={`/notes/${note.id}`}
+              className={css.link}
+              prefetch={false}
+            >
               View details
             </Link>
             <button

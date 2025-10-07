@@ -29,6 +29,7 @@ function TagsMenu() {
               href="/notes/filter/All"
               className={css.menuLink}
               onClick={handleClick}
+              prefetch={false}
             >
               All notes
             </Link>
@@ -39,6 +40,7 @@ function TagsMenu() {
                 href={`/notes/filter/${tag}`}
                 className={css.menuLink}
                 onClick={handleClick}
+                prefetch={false}
               >
                 {tag}
               </Link>

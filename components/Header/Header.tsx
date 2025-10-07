@@ -5,13 +5,15 @@ import TagsMenu from "../TagsMenu/TagsMenu";
 function Header() {
   return (
     <header className={css.header}>
-      <Link href="/" aria-label="Home">
+      <Link href="/" aria-label="Home" prefetch={false}>
         NoteHub
       </Link>
       <nav aria-label="Main Navigation">
         <ul className={css.navigation}>
           <li>
-            <Link href="/">Home</Link>
+            <Link href="/" prefetch={false}>
+              Home
+            </Link>
           </li>
           <li>
             <TagsMenu />

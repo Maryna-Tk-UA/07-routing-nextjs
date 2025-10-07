@@ -18,12 +18,15 @@ interface fetchNotesResponse {
 }
 
 export async function fetchNotes({ page, searchValue, tag }: fetchNotesProps) {
+  const t = tag?.trim();
+  const isAll = t?.toLowerCase() === "all";
+
   const { data } = await axios.get<fetchNotesResponse>(`${BASE_URL}`, {
     params: {
       page,
       perPage: PER_PAGE,
       search: searchValue,
-      ...(tag !== "all" ? { tag: tag } : {}), // через спред якщо тег обрано, то по ньому отримання, якщо ні, то всі нотатки
+      ...(t && !isAll ? { tag: t } : {}), // через спред якщо тег обрано, то по ньому отримання, якщо ні, то всі нотатки
     },
     headers: {
       Authorization: `Bearer ${ACCESS_TOKEN}`,
